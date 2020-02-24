@@ -45,10 +45,10 @@ void setMatrixField(vector< vector<int> > &matrix , int row , int column , int &
         printMatrix(matrix , column , i + 1);
     }
 }
-void setStartAndEnd(vector< vector<int> > matrix , int & startRow , int & startColumn , int & endRow , int & endColumn)
+void setStartAndEnd(vector< vector<int> > matrix , int & startRow , int & startColumn , int & endRow , int & endColumn , int plus)
 {
     /// Start
-    while (matrix[startRow][startColumn] == 0)
+    while (plus > 0)
     {
         cout << "What Row Do You Want to Start: " << endl;
         cin >> startRow;
@@ -66,7 +66,7 @@ void setStartAndEnd(vector< vector<int> > matrix , int & startRow , int & startC
         }
     }
     /// End
-    while (matrix[endRow][endColumn] == 0)
+    while (plus > 0)
     {
         cout << "What Row Do You Want to End: " << endl;
         cin >> endRow;
@@ -83,39 +83,155 @@ void setStartAndEnd(vector< vector<int> > matrix , int & startRow , int & startC
             cout << "You Can't Start from Block Places!!!" << endl << "Enter Again" << endl;
         }
     }
+    if (plus = 0)
+    {
+        cout << "There is no free way in the matrix!" << endl;
+    }
 }
 int getSmallestPathToDestination(vector< vector<int> > matrix , int startRow , int startColumn , int endRow , int endColumn , int row , int column , int plus , int minus)
 {
-    cout << "Smallest Path to Destination is : " << endl;
-    int tempRow , tempColumn;
+    int tempRow = startRow , tempColumn = startColumn;
     int path = 0 ;
-    while (tempRow != endRow && tempColumn != endColumn)
+    while (tempRow != endRow || tempColumn != endColumn)
     {
-        tempRow = startRow;
-        tempColumn = startColumn;
-        if (tempRow < endRow && tempColumn < endColumn)
+        if (tempRow <= endRow && tempColumn <= endColumn)
         {
-            for (int i = 0; i < plus ; i++)
+            if (tempRow != endRow)
             {
-                if(matrix[tempRow][tempColumn] != 0)
+                if (matrix[tempRow][tempColumn] == 0)
                 {
-                    
+                    tempColumn--;
+                    path--;
+                    tempRow++;
+                    path++;
+                }
+                else
+                {
+                    tempRow++;
+                    path++;
                 }
             }
+            if (tempColumn != endColumn)
+            {
+                if (matrix[tempRow][tempColumn] == 0)
+                {
+                    tempRow--;
+                    path--;
+                    tempColumn++;
+                    path++;
+                }
+                else
+                {
+                    tempColumn++;
+                    path++;
+                }
+            }
+            cout << tempRow << "  " << tempColumn << "   " << path << endl;
         }
         else if (tempRow > endRow && tempColumn < endColumn)
         {
-
+            if (tempRow != endRow)
+            {
+                if (matrix[tempRow][tempColumn] == 0)
+                {
+                    tempColumn--;
+                    path--;
+                    tempRow--;
+                    path++;
+                }
+                else
+                {
+                    tempRow--;
+                    path++;
+                }
+            }
+            if (tempColumn != endColumn)
+            {
+                if (matrix[tempRow][tempColumn] == 0)
+                {
+                    tempRow++;
+                    path--;
+                    tempColumn++;
+                    path++;
+                }
+                else
+                {
+                    tempColumn++;
+                    path++;
+                }
+            }
+            cout << tempRow << "  " << tempColumn << endl;
         }
         else if (tempRow < endRow && tempColumn > endColumn)
         {
-
+            if (tempRow != endRow)
+            {
+                if (matrix[tempRow][tempColumn] == 0)
+                {
+                    tempColumn++;
+                    path--;
+                    tempRow++;
+                    path++;
+                }
+                else
+                {
+                    tempRow++;
+                    path++;
+                }
+            }
+            if (tempColumn != endColumn)
+            {
+                if (matrix[tempRow][tempColumn] == 0)
+                {
+                    tempRow--;
+                    path--;
+                    tempColumn--;
+                    path++;
+                }
+                else
+                {
+                    tempColumn--;
+                    path++;
+                }
+            }
+            cout << tempRow << "  " << tempColumn << endl;
         }
-        else
+        else if (tempRow >= endRow && tempColumn >= endColumn)
         {
-
+            if (tempRow != endRow)
+            {
+                if (matrix[tempRow][tempColumn] == 0)
+                {
+                    tempColumn++;
+                    path--;
+                    tempRow--;
+                    path++;
+                }
+                else
+                {
+                    tempRow--;
+                    path++;
+                }
+            }
+            if (tempColumn != endColumn)
+            {
+                if (matrix[tempRow][tempColumn] == 0)
+                {
+                    tempRow++;
+                    path--;
+                    tempColumn--;
+                    path++;
+                }
+                else
+                {
+                    tempColumn--;
+                    path++;
+                }
+            }
+            cout << tempRow << "  " << tempColumn << endl;
         }
     }
+    return path;
 }
 int main() {
     int row , column;
@@ -124,7 +240,7 @@ int main() {
     int minus = 0 , plus = 0;
     setMatrixField(matrixField , row , column , plus , minus);
     int startRow = 0 , startColumn = 0 , endRow = 0 , endColumn = 0;
-    setStartAndEnd(matrixField , startRow , startColumn , endRow , endColumn );
-    getSmallestPathToDestination(matrixField , startRow , startColumn , endRow , endColumn , row , column , plus , minus);
+    setStartAndEnd(matrixField , startRow , startColumn , endRow , endColumn , plus );
+    cout << "Smallest Path to destination is: " << getSmallestPathToDestination(matrixField , startRow , startColumn , endRow , endColumn , row , column , plus , minus) << endl;
     return 0;
 }
