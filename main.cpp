@@ -73,14 +73,14 @@ void setStartAndEnd(vector< vector<int> > matrix , int & startRow , int & startC
         cout << endl;
         cout << "What Column Do You Want to End: " << endl;
         cin >> endColumn;
-        if (matrix[endRow][endColumn] == 1)
+        if (matrix[endRow][endColumn] == 1 && startRow >= endRow && startColumn <= endColumn)
         {
             cout << "Well Done! You will Finish at ["<< endRow << "][" << endColumn << "] " << endl;
             break;
         }
         else
         {
-            cout << "You Can't Start from Block Places!!!" << endl << "Enter Again" << endl;
+            cout << "There might be two problems" << endl << "1.You Can't Start from Block Places!" << "or" << "2. We can't move to left or down!" << endl;
         }
     }
     if (plus = 0)
@@ -94,141 +94,31 @@ int getSmallestPathToDestination(vector< vector<int> > matrix , int startRow , i
     int path = 0 ;
     while (tempRow != endRow || tempColumn != endColumn)
     {
-        if (tempRow <= endRow && tempColumn <= endColumn)
+        if(tempRow != endRow)
         {
-            if (tempRow != endRow)
+            tempRow--;
+            path++;
+            if (matrix[tempRow][tempColumn] == 0)
             {
-                if (matrix[tempRow][tempColumn] == 0)
-                {
-                    tempColumn--;
-                    path--;
-                    tempRow++;
-                    path++;
-                }
-                else
-                {
-                    tempRow++;
-                    path++;
-                }
+                tempRow++;
+                tempColumn++;
             }
-            if (tempColumn != endColumn)
+            if (matrix[tempRow][tempColumn] == 0)
             {
-                if (matrix[tempRow][tempColumn] == 0)
-                {
-                    tempRow--;
-                    path--;
-                    tempColumn++;
-                    path++;
-                }
-                else
-                {
-                    tempColumn++;
-                    path++;
-                }
+                path--;
+                cout << "Block" << endl;
             }
-            cout << tempRow << "  " << tempColumn << "   " << path << endl;
+            continue;
         }
-        else if (tempRow > endRow && tempColumn < endColumn)
+        if(tempColumn != endColumn)
         {
-            if (tempRow != endRow)
+            tempColumn++;
+            path++;
+            if (matrix[tempRow][tempColumn] == 0)
             {
-                if (matrix[tempRow][tempColumn] == 0)
-                {
-                    tempColumn--;
-                    path--;
-                    tempRow--;
-                    path++;
-                }
-                else
-                {
-                    tempRow--;
-                    path++;
-                }
+                path--;
+                cout << "block" << endl;
             }
-            if (tempColumn != endColumn)
-            {
-                if (matrix[tempRow][tempColumn] == 0)
-                {
-                    tempRow++;
-                    path--;
-                    tempColumn++;
-                    path++;
-                }
-                else
-                {
-                    tempColumn++;
-                    path++;
-                }
-            }
-            cout << tempRow << "  " << tempColumn << endl;
-        }
-        else if (tempRow < endRow && tempColumn > endColumn)
-        {
-            if (tempRow != endRow)
-            {
-                if (matrix[tempRow][tempColumn] == 0)
-                {
-                    tempColumn++;
-                    path--;
-                    tempRow++;
-                    path++;
-                }
-                else
-                {
-                    tempRow++;
-                    path++;
-                }
-            }
-            if (tempColumn != endColumn)
-            {
-                if (matrix[tempRow][tempColumn] == 0)
-                {
-                    tempRow--;
-                    path--;
-                    tempColumn--;
-                    path++;
-                }
-                else
-                {
-                    tempColumn--;
-                    path++;
-                }
-            }
-            cout << tempRow << "  " << tempColumn << endl;
-        }
-        else if (tempRow >= endRow && tempColumn >= endColumn)
-        {
-            if (tempRow != endRow)
-            {
-                if (matrix[tempRow][tempColumn] == 0)
-                {
-                    tempColumn++;
-                    path--;
-                    tempRow--;
-                    path++;
-                }
-                else
-                {
-                    tempRow--;
-                    path++;
-                }
-            }
-            if (tempColumn != endColumn)
-            {
-                if (matrix[tempRow][tempColumn] == 0)
-                {
-                    tempRow++;
-                    path--;
-                    tempColumn--;
-                    path++;
-                }
-                else
-                {
-                    tempColumn--;
-                    path++;
-                }
-            }
-            cout << tempRow << "  " << tempColumn << endl;
         }
     }
     return path;
