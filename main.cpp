@@ -88,40 +88,69 @@ void setStartAndEnd(vector< vector<int> > matrix , int & startRow , int & startC
         cout << "There is no free way in the matrix!" << endl;
     }
 }
-int getSmallestPathToDestination(vector< vector<int> > matrix , int startRow , int startColumn , int endRow , int endColumn , int row , int column , int plus , int minus)
+void getSmallestPathToDestination(vector< vector<int> > matrix , int startRow , int startColumn , int endRow , int endColumn , int row , int column , int plus , int minus)
 {
-    int tempRow = startRow , tempColumn = startColumn;
-    int path = 0 ;
-    while (tempRow != endRow || tempColumn != endColumn)
+    int finalPath = row + column;
+    for (int i = startRow; i >= endRow ; i--)
     {
-        if(tempRow != endRow)
+        for (int j = startColumn; j <= endColumn ; j++)
         {
-            tempRow--;
-            path++;
-            if (matrix[tempRow][tempColumn] == 0)
+            if (matrix[i][j] == 0)
             {
-                tempRow++;
-                tempColumn++;
+                continue;
             }
-            if (matrix[tempRow][tempColumn] == 0)
+            int tempRow = i , tempColumn = j;
+            int path;
+            path = (startRow - i) + (j - startColumn);
+            bool setCondition = true;
+            bool permissionPath = true;
+            while (setCondition)
             {
-                path--;
-                cout << "Block" << endl;
+                if (tempRow == endRow && tempColumn == endColumn)
+                {
+                    setCondition = false;
+                    continue;
+                }
+                if (tempRow != endRow)
+                {
+                    if(matrix[tempRow - 1][tempColumn] == 1)
+                    {
+                        tempRow--;
+                        path++;
+                    }
+                    else if (matrix[tempRow][tempColumn + 1] == 1)
+                    {
+                        tempColumn++;
+                        path++;
+                    }
+                    else
+                    {
+                        permissionPath = false;
+                        setCondition = false;
+                    }
+                    continue;
+                }
+                if (tempColumn != endColumn)
+                {
+                    if (matrix[tempRow][tempColumn + 1] == 1)
+                    {
+                        tempColumn++;
+                        path++;
+                    }
+                    else
+                    {
+                        permissionPath = false;
+                        setCondition = false;
+                    }
+                }
             }
-            continue;
-        }
-        if(tempColumn != endColumn)
-        {
-            tempColumn++;
-            path++;
-            if (matrix[tempRow][tempColumn] == 0)
+            if ((i == startRow && j == startColumn && permissionPath) || (path < finalPath && permissionPath))
             {
-                path--;
-                cout << "block" << endl;
+                finalPath = path;
             }
         }
     }
-    return path;
+    cout << "Smallest Path to destination is: " << finalPath << endl;
 }
 int main() {
     int row , column;
@@ -131,6 +160,6 @@ int main() {
     setMatrixField(matrixField , row , column , plus , minus);
     int startRow = 0 , startColumn = 0 , endRow = 0 , endColumn = 0;
     setStartAndEnd(matrixField , startRow , startColumn , endRow , endColumn , plus );
-    cout << "Smallest Path to destination is: " << getSmallestPathToDestination(matrixField , startRow , startColumn , endRow , endColumn , row , column , plus , minus) << endl;
+    getSmallestPathToDestination(matrixField , startRow , startColumn , endRow , endColumn , row , column , plus , minus);
     return 0;
 }
